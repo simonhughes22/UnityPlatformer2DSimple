@@ -5,29 +5,34 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
-	public float speed;
-	public float jumpForce;
+	public float speed = 10f;
+    // gravity scale is set to 5f
+	public float jumpForce = 25f;
 	public float moveInput;
-    
-    public float checkRadius;
-    public LayerMask whatIsGround;
-    public float jumpDelaySecs = 0.5f;
+    private bool facingRight = true;
 
+    // Components
     private Rigidbody2D rb;
-    private BoxCollider2D coll;
-	private bool facingRight = true;
+    private BoxCollider2D coll;    
+
+    public float checkRadius = 0.1f;
+    public LayerMask whatIsGround;
+    // needed as we use same tiles for walls and for ground
+    public Transform groundCheck;
+
+    // allow for lag between jump press and jump (if pressed just before landing)
+    public float jumpDelaySecs = 0.25f;
+    
     private bool isGrounded;
     private float lastJumpTime = -1f;
 
-	public int extraJumps;
-	private int currentJumps;
+	public int extraJumps = 0;
+	public int currentJumps;
 
     public float fallMultiplier = 2.5f;
-    public float lowJumpMultiplier = 2.0f;
+    public float lowJumpMultiplier = 5.0f;
     public float knockBack = 2f;
-
-    public int hits = 0;
-
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -39,71 +44,82 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-    	if(isGrounded){
-    		currentJumps = extraJumps;
-            lastJumpTime = -1f;
-    	}
+        SetJumpState();
+        HorizontalMovement();
+    }
 
+    private void SetJumpState()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        if (isGrounded)
+        {
+            currentJumps = extraJumps;
+        }
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            lastJumpTime = Time.realtimeSinceStartup;
+        }
+    }
+
+    void FixedUpdate()
+    {       
+        VerticalMovement();
+    }
+
+    private void HorizontalMovement()
+    {
+        moveInput = Input.GetAxis("Horizontal");
+
+        rb.velocity = new Vector2(Mathf.Round(moveInput * speed), Mathf.Round(rb.velocity.y));
+        if (!facingRight && moveInput > 0)
+        {
+            Flip();
+        }
+        else if (facingRight && moveInput < 0)
+        {
+            Flip();
+        }
+    }
+
+    void Flip()
+    {
+        facingRight = !facingRight;
+        Vector3 scaler = transform.localScale;
+        scaler.x *= -1;
+        transform.localScale = scaler;
+    }
+
+    // inside FixedUpdate as working with RigidBody and Physics engine
+    private void VerticalMovement()
+    {
         float timeSinceLastJump = Time.realtimeSinceStartup - lastJumpTime;
-        bool canJump = timeSinceLastJump >= jumpDelaySecs;
+        
+        // can jump if on ground and jump pressed within small time window
+        bool canJump = timeSinceLastJump <= jumpDelaySecs;        
 
-        if(Input.GetButtonDown("Jump") && currentJumps > 0 && canJump){
-        	//rb.velocity = Vector2.up * jumpForce;
-
-            rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-
-            lastJumpTime = Time.realtimeSinceStartup;
-        	currentJumps--;
-
-            hits += 1;
-            Debug.Log("Jump 1: " + hits);
+        if (Input.GetButtonDown("Jump") && currentJumps > 0)
+        {
+            rb.velocity = new Vector2(0, jumpForce); ;
+            currentJumps--;
         }
-        else if(isGrounded && Input.GetButtonDown("Jump") && currentJumps == 0 && canJump){
-	        //rb.velocity = Vector2.up * jumpForce;
-
-            rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
-
+        else if (isGrounded && canJump)
+        {
+            rb.velocity = new Vector2(0, jumpForce);
             lastJumpTime = Time.realtimeSinceStartup;
-            Debug.Log("Jump 2: " + Time.realtimeSinceStartup);
         }
-
 
         //Better jump logic in Unity(from video)
         // falling
         if (rb.velocity.y < 0)
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-            Debug.Log("Falling: " + Time.realtimeSinceStartup);
         }
         // rising
-        else if (rb.velocity.y > 0 && !Input.GetButton("Jump"))
+        else if (rb.velocity.y > 0 && !Input.GetButton("Jump")) // if jumping and not holding jump 
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
-            Debug.Log("Not Jumping: " + Time.realtimeSinceStartup);
         }
-    }
-    
-    void FixedUpdate()
-    {       	
-        isGrounded = coll.IsTouchingLayers(whatIsGround);
-    
-    	moveInput = Input.GetAxis("Horizontal");
-
-        rb.velocity = new Vector2(Mathf.Round(moveInput * speed), Mathf.Round(rb.velocity.y));
-    	
-    	if(!facingRight && moveInput > 0){    	
-    		Flip();
-    	}
-    	else if(facingRight && moveInput < 0){
-    		Flip();
-    	}
-    }
-    
-    void Flip(){
-    	facingRight = !facingRight;
-    	Vector3 scaler = transform.localScale;
-    	scaler.x *= -1;
-    	transform.localScale = scaler;
     }
 
     private void OnCollisionEnter2D(Collision2D other)
@@ -117,7 +133,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                rb.velocity = new Vector2(-knockBack, knockBack);
+                rb.velocity = new Vector2(knockBack, knockBack);
             }
         }
     }

@@ -1871,8 +1871,8 @@ GameObject:
   - component: {fileID: 1691188709}
   - component: {fileID: 1691188708}
   - component: {fileID: 1691188707}
-  - component: {fileID: 1691188710}
   - component: {fileID: 1691188711}
+  - component: {fileID: 1691188712}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1895,7 +1895,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 5
   m_Material: {fileID: 6200000, guid: 3a9de07f74e4249c188eeb22183f6458, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -1969,29 +1969,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1691188710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1691188705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60208d0d0b1204b888b667d567221e02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 10
-  jumpForce: 7.5
-  moveInput: 0
-  groundCheck: {fileID: 1214308213}
-  checkRadius: 0.5
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 64
-  extraJumps: 2
-  fallMultiplier: 2.5
-  lowJumpMultiplier: 2
 --- !u!61 &1691188711
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2018,6 +1995,34 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1691188712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691188705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60208d0d0b1204b888b667d567221e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10
+  jumpForce: 25
+  moveInput: 0
+  checkRadius: 0.1
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 64
+  groundCheck: {fileID: 1214308213}
+  doubleJumpDelaySecs: 0.5
+  jumpDelaySecs: 0.25
+  isGrounded: 0
+  extraJumps: 0
+  fallMultiplier: 2.5
+  lowJumpMultiplier: 5
+  knockBack: 2
+  timeSinceLastJump: 0
 --- !u!1 &1741877400
 GameObject:
   m_ObjectHideFlags: 0
@@ -2064,7 +2069,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.8071749, y: 1}
+    m_SensorSize: {x: 1.5474138, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
