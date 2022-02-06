@@ -1895,7 +1895,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 5
   m_Material: {fileID: 6200000, guid: 3a9de07f74e4249c188eeb22183f6458, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -1982,16 +1982,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  jumpForce: 7.5
+  jumpForce: 25
   moveInput: 0
-  groundCheck: {fileID: 1214308213}
-  checkRadius: 0.5
+  checkRadius: 0.1
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
+  groundCheck: {fileID: 1214308213}
+  jumpDelaySecs: 0.25
   extraJumps: 2
+  currentJumps: 0
   fallMultiplier: 2.5
-  lowJumpMultiplier: 2
+  lowJumpMultiplier: 5
+  knockBack: 2
 --- !u!61 &1691188711
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2064,7 +2067,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.8071749, y: 1}
+    m_SensorSize: {x: 1.9630681, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
