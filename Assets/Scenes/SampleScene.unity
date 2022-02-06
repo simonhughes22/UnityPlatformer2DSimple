@@ -1969,35 +1969,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD
---- !u!114 &1691188710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1691188705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60208d0d0b1204b888b667d567221e02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 10
-  jumpForce: 25
-  moveInput: 0
-  checkRadius: 0.1
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 64
-  groundCheck: {fileID: 1214308213}
-  jumpDelaySecs: 0.25
-  extraJumps: 2
-  currentJumps: 0
-  fallMultiplier: 2.5
-  lowJumpMultiplier: 5
-  knockBack: 2
-=======
->>>>>>> 74b5d65135dda89576166c8e56e0e699066fb024
 --- !u!61 &1691188711
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2096,11 +2067,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-<<<<<<< HEAD
-    m_SensorSize: {x: 1.9630681, y: 1}
-=======
     m_SensorSize: {x: 1.1713362, y: 1}
->>>>>>> 74b5d65135dda89576166c8e56e0e699066fb024
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
