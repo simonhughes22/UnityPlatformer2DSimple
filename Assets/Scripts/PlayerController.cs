@@ -135,6 +135,7 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = new Vector2(knockBack, knockBack);
             }
+            GameState.Instance.PlayerHealth -= 1;
         }
     }
 }
