@@ -3,15 +3,8 @@ using System.Collections;
 
 public class EnemyBaseBehavior : MonoBehaviour
 {
-    // Use this for initialization
-    void Start()
+    void OnBecameInvisible()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        Destroy(gameObject);
     }
 }
