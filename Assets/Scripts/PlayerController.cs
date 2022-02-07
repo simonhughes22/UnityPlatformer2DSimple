@@ -5,39 +5,60 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
-	public float speed = 10f;
+    [SerializeField]
+    public float speed = 10f;
     // gravity scale is set to 5f
-	public float jumpForce = 25f;
-	public float moveInput;
+    [SerializeField]
+    public float jumpForce = 25f;
+
+    private float moveInput;
     private bool facingRight = true;
 
     // Components
     private Rigidbody2D rb;
-    private BoxCollider2D coll;    
+    private BoxCollider2D coll;
+    private AudioSource audioSource;
 
+    // Jump Logic
+    [SerializeField]
     public float checkRadius = 0.1f;
+    [SerializeField]
     public LayerMask whatIsGround;
     // needed as we use same tiles for walls and for ground
+    [SerializeField]
     public Transform groundCheck;
 
     // allow for lag between jump press and jump (if pressed just before landing)
+    [SerializeField]
     public float jumpDelaySecs = 0.25f;
     
     private bool isGrounded;
     private float lastJumpTime = -1f;
 
-	public int extraJumps = 0;
-	public int currentJumps;
+    [SerializeField]
+    public int extraJumps = 0;
+	private int currentJumps;
 
+    [SerializeField]
     public float fallMultiplier = 2.5f;
+    [SerializeField]
     public float lowJumpMultiplier = 5.0f;
+    [SerializeField]
     public float knockBack = 2f;
-   
+
+    // Sounds
+    [SerializeField]
+    public AudioClip jumpClip;
+    [SerializeField]
+    public AudioClip hitClip;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         coll = GetComponent<BoxCollider2D>();
+        audioSource = GetComponent<AudioSource>();
+
     	currentJumps = extraJumps;
     }
 
@@ -46,6 +67,12 @@ public class PlayerController : MonoBehaviour
     {
         SetJumpState();
         HorizontalMovement();
+    }
+
+    // Update is called once per frame
+    protected void PlaySound(AudioClip clip)
+    {
+        audioSource.PlayOneShot(clip);
     }
 
     private void SetJumpState()
@@ -102,11 +129,13 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(0, jumpForce); ;
             currentJumps--;
+            PlaySound(jumpClip);
         }
         else if (isGrounded && canJump)
         {
             rb.velocity = new Vector2(0, jumpForce);
             lastJumpTime = Time.realtimeSinceStartup;
+            PlaySound(jumpClip);
         }
 
         //Better jump logic in Unity(from video)
@@ -135,6 +164,7 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = new Vector2(knockBack, knockBack);
             }
+            PlaySound(hitClip);
             GameState.Instance.PlayerHealth -= 1;
         }
     }
