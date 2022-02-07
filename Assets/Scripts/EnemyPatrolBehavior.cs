@@ -3,13 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PatrolAI : MonoBehaviour
+public class EnemyPatrolBehavior : MonoBehaviour
 {
+    [SerializeField]
     public float speed;
+    [SerializeField]
     public Transform[] patrolPoints;
+    [SerializeField]
     public float waitTimeSecs;
-    public float minDistance = 1;
-    public float distance = -1;
+    [SerializeField]
+    public float minDistance = 1;     
 
     private int currentPointIndex = 0;
     private bool waiting = false;
@@ -22,8 +25,8 @@ public class PatrolAI : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        distance = Vector2.Distance(transform.position, patrolPoints[currentPointIndex].position);
+    {        
+        var distance = Vector2.Distance(transform.position, patrolPoints[currentPointIndex].position);
         if (distance >= minDistance)
         {
             transform.position = Vector2.MoveTowards(transform.position, patrolPoints[currentPointIndex].position, speed * Time.deltaTime);

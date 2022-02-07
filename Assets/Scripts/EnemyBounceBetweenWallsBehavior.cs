@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BounceBetweenWalls : MonoBehaviour
+public class EnemyBounceBetweenWallsBehavior : MonoBehaviour
 {
     public LayerMask ground;
-    public float waitTimeSecs = 1;
+    // If this is too low, it has issues bouncing back and forth for some reason
+    public float waitTimeSecs = 1f;
     public float movementSpeed = 5;
     public Transform leftCheck;
     public Transform rightCheck;
-    public float checkRadius = 0.5f;
+    public float checkRadius = 0.1f;
 
     private bool waiting = false;
     private bool pointingLeft = true;
@@ -26,7 +27,6 @@ public class BounceBetweenWalls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // touching left wall
         if (Physics2D.OverlapCircle(leftCheck.position, checkRadius, ground))
         {
             if (!waiting)
@@ -46,7 +46,7 @@ public class BounceBetweenWalls : MonoBehaviour
         else
         {
             Move();
-        }        
+        }
     }
 
     private void Move()

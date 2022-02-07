@@ -56,11 +56,13 @@
     <Analyzer Include="/Applications/Visual Studio.app/Contents/Resources/lib/monodevelop/AddIns/MonoDevelop.Unity/Analyzers/Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets/Scripts/BounceBetweenWalls.cs" />
     <Compile Include="Assets/Scripts/PlayerController.cs" />
-    <Compile Include="Assets/Scripts/PatrolAI.cs" />
     <Compile Include="Assets/Scripts/HealthBar.cs" />
-    <Compile Include="Assets/Scripts/GameState.cs" />
+    <Compile Include="Assets/Scripts/GameOverScreen.cs" />
+    <Compile Include="Assets/Scripts/EnemyBaseBehaviour.cs" />
+    <Compile Include="Assets/Scripts/EnemyBounceBetweenWallsBehavior.cs" />
+    <Compile Include="Assets/Scripts/GameManager.cs" />
+    <Compile Include="Assets/Scripts/EnemyPatrolBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

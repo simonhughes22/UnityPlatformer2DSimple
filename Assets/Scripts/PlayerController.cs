@@ -6,6 +6,10 @@ using System;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
+    public int maxHealth = 5;
+    public int currentHealth;
+
+    [SerializeField]
     public float speed = 10f;
     // gravity scale is set to 5f
     [SerializeField]
@@ -52,6 +56,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     public AudioClip hitClip;
 
+    // Game Logic
+    [SerializeField]
+    GameOverScreen gameOverScreen;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,11 +68,15 @@ public class PlayerController : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
 
     	currentJumps = extraJumps;
+        currentHealth = maxHealth;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (currentHealth <= 0) {
+            return;
+        }
         SetJumpState();
         HorizontalMovement();
     }
@@ -90,7 +102,11 @@ public class PlayerController : MonoBehaviour
     }
 
     void FixedUpdate()
-    {       
+    {
+        if (currentHealth <= 0)
+        {          
+            return;
+        }
         VerticalMovement();
     }
 
@@ -151,21 +167,63 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnDeath()
+    {
+        gameOverScreen.Show();
+    }
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.tag == "Enemy")
         {
-            // to the right
-            if (other.transform.position.x > transform.position.x)
+
+            // check if jumping on enemy
+            // If ground check overlaps enemy then we are jumping on them
+            Collider2D[] hits = Physics2D.OverlapCircleAll(groundCheck.transform.position, 3f);
+            foreach (Collider2D col in hits)
             {
-                rb.velocity = new Vector2(-knockBack, knockBack);
+                if (col.gameObject.Equals(other.gameObject))
+                {
+                    OnEnemyJumpOn(other);
+                    return;
+                }
             }
-            else
-            {
-                rb.velocity = new Vector2(knockBack, knockBack);
-            }
-            PlaySound(hitClip);
-            GameState.Instance.PlayerHealth -= 1;
+
+            OnEnemyHit(other);
+        }
+    }
+
+    private void OnEnemyJumpOn(Collision2D other)
+    {
+        rb.velocity = new Vector2(rb.velocity.x, knockBack);
+        PlaySound(jumpClip);
+
+        //Destroy(other.gameObject);
+        var otherColl = other.gameObject.GetComponent<BoxCollider2D>();
+        var otherRb = other.gameObject.GetComponent<Rigidbody2D>();
+        otherColl.isTrigger = true;
+        otherRb.velocity = new Vector2(0, 10f);
+    }
+
+    private void OnEnemyHit(Collision2D other)
+    {
+        // to the right
+        if (other.transform.position.x > transform.position.x)
+        {
+            rb.velocity = new Vector2(-knockBack, knockBack);
+        }
+        // to the left
+        else
+        {
+            rb.velocity = new Vector2(knockBack, knockBack);
+        }
+
+        PlaySound(hitClip);
+        currentHealth -= 1;
+
+        if (currentHealth == 0)
+        {
+            OnDeath();
         }
     }
 }
