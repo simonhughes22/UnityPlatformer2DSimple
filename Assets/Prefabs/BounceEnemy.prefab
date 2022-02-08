@@ -148,11 +148,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c70ee3cb3bdd64c439100bba4311716c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dropSpeed: 10
   ground:
     serializedVersion: 2
     m_Bits: 64
   waitTimeSecs: 1
-  movementSpeed: 8
+  movementSpeed: 6
   leftCheck: {fileID: 1805905111543685982}
   rightCheck: {fileID: 3570226717254240999}
   checkRadius: 0.1

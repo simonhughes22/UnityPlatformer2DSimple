@@ -20,8 +20,7 @@ public class PlayerController : MonoBehaviour
 
     // Components
     private Rigidbody2D rb;
-    private BoxCollider2D coll;
-    private AudioSource audioSource;
+    private BoxCollider2D coll;   
 
     // Jump Logic
     [SerializeField]
@@ -65,7 +64,6 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         coll = GetComponent<BoxCollider2D>();
-        audioSource = GetComponent<AudioSource>();
 
     	currentJumps = extraJumps;
         currentHealth = maxHealth;
@@ -80,13 +78,7 @@ public class PlayerController : MonoBehaviour
         SetJumpState();
         HorizontalMovement();
     }
-
-    // Update is called once per frame
-    protected void PlaySound(AudioClip clip)
-    {
-        audioSource.PlayOneShot(clip);
-    }
-
+    
     private void SetJumpState()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
@@ -136,6 +128,8 @@ public class PlayerController : MonoBehaviour
     // inside FixedUpdate as working with RigidBody and Physics engine
     private void VerticalMovement()
     {
+        //TODO - implement this for even better jumping - https://pressstart.vip/tutorials/2019/10/15/104/perfect-jumping-in-unity.html (includes code)
+
         float timeSinceLastJump = Time.realtimeSinceStartup - lastJumpTime;
         
         // can jump if on ground and jump pressed within small time window
@@ -145,13 +139,13 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(0, jumpForce); ;
             currentJumps--;
-            PlaySound(jumpClip);
+            GameManager.PlaySound(jumpClip);
         }
         else if (isGrounded && canJump)
         {
             rb.velocity = new Vector2(0, jumpForce);
             lastJumpTime = Time.realtimeSinceStartup;
-            PlaySound(jumpClip);
+            GameManager.PlaySound(jumpClip);
         }
 
         //Better jump logic in Unity(from video)
@@ -197,13 +191,10 @@ public class PlayerController : MonoBehaviour
     private void OnEnemyJumpOn(Collision2D other)
     {
         rb.velocity = new Vector2(rb.velocity.x, knockBack);
-        PlaySound(jumpClip);
-
-        //Destroy(other.gameObject);
-        var otherColl = other.gameObject.GetComponent<BoxCollider2D>();
-        var otherRb = other.gameObject.GetComponent<Rigidbody2D>();
-        otherColl.isTrigger = true;
-        otherRb.velocity = new Vector2(0, 10f);
+        GameManager.PlaySound(jumpClip);
+        
+        var enemyController = other.gameObject.GetComponent<EnemyBaseBehavior>();        
+        enemyController.Kill();        
     }
 
     private void OnEnemyHit(Collision2D other)
@@ -219,7 +210,7 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(knockBack, knockBack);
         }
 
-        PlaySound(hitClip);
+        GameManager.PlaySound(hitClip);
         currentHealth -= 1;
 
         if (currentHealth == 0)

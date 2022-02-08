@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBounceBetweenWallsBehavior : MonoBehaviour
+public class EnemyBounceBetweenWallsBehavior : EnemyBaseBehavior
 {
     public LayerMask ground;
     // If this is too low, it has issues bouncing back and forth for some reason
@@ -13,16 +13,7 @@ public class EnemyBounceBetweenWallsBehavior : MonoBehaviour
     public float checkRadius = 0.1f;
 
     private bool waiting = false;
-    private bool pointingLeft = true;
-    private BoxCollider2D coll;
-    private Rigidbody2D rb;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        coll = GetComponent<BoxCollider2D>();
-        rb = GetComponent<Rigidbody2D>();
-    }
+    private bool pointingLeft = true;      
 
     // Update is called once per frame
     void Update()
@@ -71,5 +62,5 @@ public class EnemyBounceBetweenWallsBehavior : MonoBehaviour
         pointingLeft = !pointingLeft;
         Move();
         waiting = false;
-    }
+    }    
 }

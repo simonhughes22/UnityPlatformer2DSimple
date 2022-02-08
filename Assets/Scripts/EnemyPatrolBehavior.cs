@@ -15,13 +15,7 @@ public class EnemyPatrolBehavior : EnemyBaseBehavior
     public float minDistance = 1;     
 
     private int currentPointIndex = 0;
-    private bool waiting = false;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private bool waiting = false;   
 
     // Update is called once per frame
     void Update()
@@ -50,4 +44,5 @@ public class EnemyPatrolBehavior : EnemyBaseBehavior
         }
         waiting = false;
     }
+    
 }
