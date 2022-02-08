@@ -63,6 +63,8 @@
     <Compile Include="Assets/Scripts/GameOverScreen.cs" />
     <Compile Include="Assets/Scripts/GameManager.cs" />
     <Compile Include="Assets/Scripts/EnemyBounceBetweenWallsBehavior.cs" />
+    <Compile Include="Assets/Scripts/ProjectileController.cs" />
+    <Compile Include="Assets/Scripts/ProjectileSpawnerController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -5,6 +5,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    [SerializeField]
+    public int bottomOfScreenYVal = -200;
+
     private AudioSource audioSource;
     // Use this for initialization
     void Awake()

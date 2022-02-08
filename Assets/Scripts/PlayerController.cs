@@ -171,7 +171,8 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "Enemy")
         {
             // check if jumping on enemy
-            if (transform.position.y > other.transform.position.y + 0.1f) { // our center must be above enemy's center                 
+            if (transform.position.y > other.transform.position.y + 0.1f)
+            { // our center must be above enemy's center                 
                 // If ground check overlaps enemy then we are jumping on them
                 Collider2D[] hits = Physics2D.OverlapCircleAll(groundCheck.transform.position, 0.47f); // player has width 1.0f
                 foreach (Collider2D col in hits)
@@ -184,7 +185,11 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            OnEnemyHit(other);
+            OnHit(other);
+        }
+        else if (other.gameObject.tag == "Projectile")
+        {
+            OnHit(other);
         }
     }
 
@@ -197,7 +202,7 @@ public class PlayerController : MonoBehaviour
         enemyController.Kill();        
     }
 
-    private void OnEnemyHit(Collision2D other)
+    private void OnHit(Collision2D other)
     {
         // to the right
         if (other.transform.position.x > transform.position.x)
