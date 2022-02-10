@@ -20,12 +20,21 @@ public class GameManager : MonoBehaviour
         Instance.audioSource.PlayOneShot(clip);
     }
 
+    public static void Quit() {        
+        UnityEditor.EditorApplication.isPlaying = false;
+        Application.Quit();        
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene("MainScene");
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Quit();
         }
     }
 }

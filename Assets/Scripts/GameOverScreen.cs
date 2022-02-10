@@ -18,7 +18,6 @@ public class GameOverScreen : MonoBehaviour
     }
 
     public void Quit() {
-        UnityEditor.EditorApplication.isPlaying = false;
-        Application.Quit();        
+        GameManager.Quit();
     }
 }

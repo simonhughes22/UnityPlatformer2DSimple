@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     
     private bool isGrounded;
     private float lastJumpTime = -1f;
+    private float timeOnGround = 0f;
 
     [SerializeField]
     public int extraJumps = 0;
@@ -47,7 +48,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     public float lowJumpMultiplier = 5.0f;
     [SerializeField]
-    public float knockBack = 2f;
+    public float knockBack = 15f;
 
     // Sounds
     [SerializeField]
@@ -67,6 +68,8 @@ public class PlayerController : MonoBehaviour
 
     	currentJumps = extraJumps;
         currentHealth = maxHealth;
+        timeOnGround = Time.realtimeSinceStartup;
+        isGrounded = true;
     }
 
     // Update is called once per frame
@@ -78,19 +81,69 @@ public class PlayerController : MonoBehaviour
         SetJumpState();
         HorizontalMovement();
     }
-    
+
+    private float facingAsFloat() {
+        if (facingRight)
+        {
+            return 1.0f;
+        }
+        else
+        {
+            return -1.0f;
+        }
+    }
+
     private void SetJumpState()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        var currentIsGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, whatIsGround);
+        // landed
+        if (!isGrounded && currentIsGrounded)
+        {
+            timeOnGround = Time.realtimeSinceStartup;
+            Squeeze();
+        }
+        else if (currentIsGrounded) {
+            var timeSinceLanded = Time.realtimeSinceStartup - timeOnGround;
+            if (timeSinceLanded >= 0.2f)
+            {
+                ResetLocalScale();
+            }
+        }
+        isGrounded = currentIsGrounded;
+
         if (isGrounded)
         {
             currentJumps = extraJumps;
+        }
+        else
+        {
+            ResetLocalScale();
         }
 
         if (Input.GetButtonDown("Jump"))
         {
             lastJumpTime = Time.realtimeSinceStartup;
         }
+    }
+
+    private void Squeeze()
+    {
+        if(transform.localScale.y == 1.0f)
+        {
+            // temporarily turn off gravity to prevent falling through the floor
+            var grav = rb.gravityScale;
+            rb.gravityScale = 0f;
+            transform.localScale = new Vector2(facingAsFloat() * 1.5f, 0.5f);
+            rb.gravityScale = grav;     
+        }        
+    }
+
+    private void ResetLocalScale()
+    {
+        if(transform.localScale.y != 1.0f)
+        {
+            transform.localScale = new Vector2(facingAsFloat(), 1.0f);
+        }        
     }
 
     void FixedUpdate()
@@ -137,13 +190,15 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && currentJumps > 0)
         {
-            rb.velocity = new Vector2(0, jumpForce); ;
+            rb.velocity = new Vector2(0, jumpForce);
+            ResetLocalScale();
             currentJumps--;
             GameManager.PlaySound(jumpClip);
         }
         else if (isGrounded && canJump)
         {
             rb.velocity = new Vector2(0, jumpForce);
+            ResetLocalScale();
             lastJumpTime = Time.realtimeSinceStartup;
             GameManager.PlaySound(jumpClip);
         }
@@ -171,7 +226,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "Enemy")
         {
             // check if jumping on enemy
-            if (transform.position.y > other.transform.position.y + 0.1f)
+            if (transform.position.y > other.transform.position.y + 0.1f) // if above enemy AND falling
             { // our center must be above enemy's center                 
                 // If ground check overlaps enemy then we are jumping on them
                 Collider2D[] hits = Physics2D.OverlapCircleAll(groundCheck.transform.position, 0.47f); // player has width 1.0f

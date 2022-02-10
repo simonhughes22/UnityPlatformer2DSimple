@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnSchedule:
-  - 0.5
+  - 2
   - 0.1
   - 0.1
   projectile: {fileID: 6331298409762293674, guid: 0b3a2a33e569b41769b18b32655b76e2, type: 3}

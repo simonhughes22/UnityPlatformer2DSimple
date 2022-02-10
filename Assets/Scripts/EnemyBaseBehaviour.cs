@@ -21,6 +21,15 @@ public class EnemyBaseBehavior : MonoBehaviour
         alive = false;
         coll.isTrigger = true;
         rb.velocity = new Vector2(0, dropSpeed);
+
+        // disable all child objects
+        foreach (Transform child in transform)
+            child.gameObject.SetActive(false);
+
+        // Shrink upon hit
+        var ls = transform.localScale;
+        var scale = new Vector2(ls.x * 1.5f, ls.y / 1.5f);
+        transform.localScale = scale;
     }
 
     void OnBecameInvisible()

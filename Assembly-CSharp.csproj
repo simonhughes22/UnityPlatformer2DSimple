@@ -59,12 +59,12 @@
     <Compile Include="Assets/Scripts/EnemyPatrolBehavior.cs" />
     <Compile Include="Assets/Scripts/EnemyBaseBehaviour.cs" />
     <Compile Include="Assets/Scripts/HealthBar.cs" />
+    <Compile Include="Assets/Scripts/ProjectileController.cs" />
     <Compile Include="Assets/Scripts/PlayerController.cs" />
     <Compile Include="Assets/Scripts/GameOverScreen.cs" />
     <Compile Include="Assets/Scripts/GameManager.cs" />
-    <Compile Include="Assets/Scripts/EnemyBounceBetweenWallsBehavior.cs" />
-    <Compile Include="Assets/Scripts/ProjectileController.cs" />
     <Compile Include="Assets/Scripts/ProjectileSpawnerController.cs" />
+    <Compile Include="Assets/Scripts/EnemyBounceBetweenWallsBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
